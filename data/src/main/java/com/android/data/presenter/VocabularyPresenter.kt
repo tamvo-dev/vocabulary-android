@@ -1,9 +1,10 @@
 package com.android.data.presenter
 
 import com.android.domain.entity.Vocabulary
+import io.reactivex.Observable
 
 interface VocabularyPresenter {
 
-    fun getListVocabulary(start: Int): List<Vocabulary>
-    fun getVocabularyById(id: Int): Vocabulary
+    fun getVocabularys(): Observable<List<Vocabulary>>
+    fun getVocabularyById(id: Int): Observable<Vocabulary>
 }

@@ -1,3 +1,3 @@
 package com.android.domain.entity
 
-data class Vocabulary(val id: Int, val word: String, val content: String)
+data class Vocabulary(var id: Int = 0, var word: String = "", var content: String = "")
