@@ -36,8 +36,8 @@ class HomeViewModel : ViewModel() {
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
-                {_vocabularys.value = it},
-                {Log.e(TAG, it.toString())},
+                { _vocabularys.value = it},
+                { Log.e(TAG, it.toString())},
                 { Log.i(TAG, "Success")}
             )
     }

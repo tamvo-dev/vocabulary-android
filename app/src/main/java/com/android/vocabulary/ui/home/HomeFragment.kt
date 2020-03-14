@@ -18,9 +18,11 @@ class HomeFragment : Fragment() {
         val TAG = "HomeFragment"
     }
 
+
     private lateinit var homeViewModel: HomeViewModel
     private lateinit var viewPager: ViewPager2
     private lateinit var onPageChangeCallback: ViewPager2.OnPageChangeCallback
+    private var init = true
 
 
     override fun onCreateView(
@@ -30,36 +32,37 @@ class HomeFragment : Fragment() {
     ): View? {
 
         val root = inflater.inflate(R.layout.fragment_home, container, false)
-        homeViewModel = ViewModelProviders.of(activity!!).get(HomeViewModel::class.java)
-
         val adapter = VocabularyAdapter()
+
+        homeViewModel = ViewModelProviders.of(activity!!).get(HomeViewModel::class.java)
         viewPager = root.findViewById(R.id.home_view_pager)
         viewPager.adapter = adapter
 
-        if (homeViewModel.position > 0){
-            Log.e(TAG, "set current " + homeViewModel.position)
-            Handler().postDelayed({
-                viewPager.setCurrentItem(homeViewModel.position)
-            }, 100)
-
-        }
 
         homeViewModel.vocabulary.observe(this, Observer {
             adapter.addVocabularys(it)
         })
 
+
+        homeViewModel.position.let {
+            if (it <= 0){
+                return@let
+            }
+            Handler().postDelayed({
+                viewPager.setCurrentItem(it, false)
+            }, 50)
+        }
+
+
         onPageChangeCallback = object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
 
-                Log.e(TAG, "position " + position)
                 if (position == adapter.itemCount - 1){
                     homeViewModel.getVocabularys()
                 }
             }
         }
-
-        Log.e(TAG, hashCode().toString())
 
         viewPager.registerOnPageChangeCallback(onPageChangeCallback)
 
@@ -69,14 +72,7 @@ class HomeFragment : Fragment() {
 
     override fun onPause() {
         super.onPause()
-
         viewPager.unregisterOnPageChangeCallback(onPageChangeCallback)
         homeViewModel.position = viewPager.currentItem
-        Log.e(TAG, "Pause " + homeViewModel.position.toString())
-    }
-
-    override fun onResume() {
-        super.onResume()
-        Log.e(TAG, "onResume" + homeViewModel.position.toString())
     }
 }
