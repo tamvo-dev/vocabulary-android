@@ -8,7 +8,7 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 
 object Injection {
-    private val BASE_URL = "http://localhost:8080"
+    private val BASE_URL = "http://192.168.1.11:8080"
 
     private val client: OkHttpClient = OkHttpClient.Builder().build()
 

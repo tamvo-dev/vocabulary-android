@@ -1,5 +1,6 @@
 package com.android.vocabulary.ui.home
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,12 +20,14 @@ class VocabularyAdapter: RecyclerView.Adapter<VocabularyAdapter.MyViewHolder>() 
 
     override fun getItemCount() = vocabularys.size
 
+    override fun getItemId(position: Int) = vocabularys[position].id as Long
+
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         val vocabulary = vocabularys[position]
         holder.bindView(vocabulary)
     }
 
-    fun addVocabulary(list: List<Vocabulary>){
+    fun addVocabularys(list: List<Vocabulary>){
         vocabularys.addAll(list)
         notifyDataSetChanged()
     }

@@ -12,35 +12,39 @@ import io.reactivex.schedulers.Schedulers
 
 class HomeViewModel : ViewModel() {
 
+    companion object {
+        val TAG = "HomeViewModel"
+    }
+
     private val vocabularyPresenter = Injection.vocabularyPresenter
     private var disposable: Disposable? = null
-
-    init {
-        Log.e("HOME", "Init")
-        getVocabularys()
-    }
 
     private val _vocabularys = MutableLiveData<List<Vocabulary>>().apply {
         value = mutableListOf()
     }
+    val vocabulary: LiveData<List<Vocabulary>> = _vocabularys
+    var position = 0
+
+    init {
+        getVocabularys()
+    }
+
 
     fun getVocabularys() {
 
-        disposable = vocabularyPresenter.getVocabularyById(15)
+        disposable = vocabularyPresenter.getVocabularys()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
-                {Log.e("HOME", it.toString())},
-                {error -> Log.e("HOME", error.toString())},
-                { Log.e("HOME", "Success")}
+                {_vocabularys.value = it},
+                {Log.e(TAG, it.toString())},
+                { Log.i(TAG, "Success")}
             )
     }
 
-    val vocabulary: LiveData<List<Vocabulary>> = _vocabularys
 
     override fun onCleared() {
         super.onCleared()
-        Log.e("HOME", "Disposable")
         disposable?.dispose()
         disposable = null
     }
